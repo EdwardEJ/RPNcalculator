@@ -1,18 +1,7 @@
-from collections import deque
 import operator
 import argparse
 
-def calc(expr):
-    '''
-    Take in string
-    each char is iterable, seperate numbers and operands into own indexes
-    remove spaces while maintaining floating numbers
-    while queue is not empty, add numbers to stack
-    if string is an operator, execute operand and last two digits
-    if next string is operator and number in stack, execute operator and next number in stack with previously generated number
-    continue until queue is empty
-    '''
-
+def calc():
     ops = { "+": operator.add,
            "-": operator.sub,
            "*": operator.mul,
@@ -20,43 +9,59 @@ def calc(expr):
           }
     operators = '+-=*/'
     stack = []
-    exprNoSpaces = []
-    for str in expr:
-        if str.isalpha() and str not in operators:
-            return "Cannot add letters"
-        if str in operators:
-            exprNoSpaces.append(str)
-            continue
-        if str.isdigit():
-            exprNoSpaces.append(int(str))
-        else:
-            exprNoSpaces.append(float(str))
-            
-    queue = deque(exprNoSpaces)
-    ans = 0
+    continue_expr = True
 
-    if len(queue) == 1:
-        return queue[0]
-    
-    while queue:
-        next = queue[0]
-        if type(next) == int or type(next) == float:
-            stack.append(queue.popleft())          
+    while continue_expr:
+        cmdLineExpr = input('Input: ')
+        if cmdLineExpr == 'q':
+            print('Exit')
+            return
+        elif cmdLineExpr == 'n':
+            print('New Calculation')
+            continue_expr = False
+            calc()
+        elif len(cmdLineExpr) > 1:
+            for num in cmdLineExpr.split():
+                if num.isalpha() and num not in operators:
+                    print('Cannot add letters')
+                    continue
+                else:
+                    if num.isdigit():
+                        stack.append(int(num))
+                    elif num not in operators:
+                        stack.append(float(num))
+                    elif num in operators:
+                        expOperator = num
+                        firstVal = stack.pop()
+                        secVal = stack.pop()
+                        result = ops[f'{expOperator}'](secVal, firstVal)
+                        stack.append(result)
+            print(stack[-1])
         else:
-            firstVal = stack.pop()
-            secVal = stack.pop()
-            queueOp = queue.popleft()
-            ans = ops[f'{queueOp}'](secVal, firstVal)
-            stack.append(ans)
-    return ans
+            if cmdLineExpr.isalpha() and cmdLineExpr not in operators:
+                print('Cannot add letters')
+                continue
+
+            if cmdLineExpr in operators and len(stack) >= 2:
+                firstVal = stack.pop()
+                secVal = stack.pop()
+                result = ops[f'{cmdLineExpr}'](secVal, firstVal)
+                print(result)
+                stack.append(result)
+            elif cmdLineExpr in operators and len(stack) < 2:
+                print('Result of last expression: ',f"{stack[-1]}")
+                continue
+            elif cmdLineExpr.isdigit():
+                print(cmdLineExpr)
+                stack.append(int(cmdLineExpr))
+            else:
+                print(cmdLineExpr)
+                stack.append(float(cmdLineExpr))
+calc()
 
 def Main():
     parser = argparse.ArgumentParser(description='Performs calculations using Reverse Polish Notation')
     parser.add_argument('expr', metavar='Expression', type=str, nargs='+', help='Enter an expression to calculate')
 
-    args = parser.parse_args()
-    result = calc(args.expr)
-    print(result)
-
 if __name__ == '__main__':
-  Main()
+    Main()
