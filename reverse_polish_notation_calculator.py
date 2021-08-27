@@ -25,16 +25,19 @@ def calc():
                 if num.isalpha() and num not in operators:
                     print('Cannot add letters')
                     continue
+                elif num in operators and len(stack) < 2:
+                    print("Need at least 2 values before calculating")
+                    break
                 else:
                     if num.isdigit():
                         stack.append(int(num))
                     elif num not in operators:
                         stack.append(float(num))
                     elif num in operators:
-                        expOperator = num
+                        exprOperator = num
                         firstVal = stack.pop()
                         secVal = stack.pop()
-                        result = ops[f'{expOperator}'](secVal, firstVal)
+                        result = ops[f'{exprOperator}'](secVal, firstVal)
                         stack.append(result)
             print(stack[-1])
         else:
@@ -43,11 +46,12 @@ def calc():
                 continue
 
             if cmdLineExpr in operators and len(stack) >= 2:
+                exprOperator = cmdLineExpr
                 firstVal = stack.pop()
                 secVal = stack.pop()
-                result = ops[f'{cmdLineExpr}'](secVal, firstVal)
-                print(result)
+                result = ops[f'{exprOperator}'](secVal, firstVal)
                 stack.append(result)
+                print(result)
             elif cmdLineExpr in operators and len(stack) < 2:
                 print('Result of last expression: ',f"{stack[-1]}")
                 continue
@@ -61,7 +65,9 @@ calc()
 
 def Main():
     parser = argparse.ArgumentParser(description='Performs calculations using Reverse Polish Notation')
-    parser.add_argument('expr', metavar='Expression', type=str, nargs='+', help='Enter an expression to calculate')
+    parser.add_argument(dest='rpncalc', action='store_true', help='Enter an expression to calculate')
+    # args = parser.parse_args(['-h'])
+    # print(args.rpncalc())
 
 if __name__ == '__main__':
     Main()
