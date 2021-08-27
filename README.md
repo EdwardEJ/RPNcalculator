@@ -10,14 +10,14 @@ This program takes in a string argument that can either be numerical or mathemat
 
 Adding one argument will return the value to be calculated. When the argument is an operator, a calculation will occur:
     > 5 
-    returns 5
+    > returns 5
     > 8
-    returns 8
+    > returns 8
     > +
-    will add 5 and 8 to return 13
+    > will add 5 and 8 to return 13
 
 The program can also take an argument with several numbers or operators:
     > 5 5 5 8 + + -
-    returns -13.0
+    > returns -13.0
     > 13 +
-    returns 0.0
+    > returns 0.0
