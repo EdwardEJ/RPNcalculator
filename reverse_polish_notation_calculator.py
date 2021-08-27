@@ -7,7 +7,7 @@ def calc():
            "*": operator.mul,
            "/": operator.truediv,
           }
-    operators = '+-=*/'
+    operators = '+-*/'
     stack = []
     continue_expr = True
 
@@ -66,8 +66,6 @@ calc()
 def Main():
     parser = argparse.ArgumentParser(description='Performs calculations using Reverse Polish Notation')
     parser.add_argument(dest='rpncalc', action='store_true', help='Enter an expression to calculate')
-    # args = parser.parse_args(['-h'])
-    # print(args.rpncalc())
 
 if __name__ == '__main__':
     Main()
