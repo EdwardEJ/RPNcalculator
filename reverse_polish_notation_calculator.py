@@ -1,5 +1,15 @@
 import operator
 import argparse
+import sys
+
+def continue_or_exit_calc(expr):
+    if expr == 'q':
+        print('Exit')
+        sys.exit()
+    elif expr == 'n':
+        print('New Calculation')
+        continue_expr = False
+        return continue_expr, calc()
 
 def calc():
     ops = { "+": operator.add,
@@ -13,14 +23,10 @@ def calc():
 
     while continue_expr:
         cmdLineExpr = input('Input: ')
-        if cmdLineExpr == 'q':
-            print('Exit')
-            return
-        elif cmdLineExpr == 'n':
-            print('New Calculation')
-            continue_expr = False
-            calc()
-        elif len(cmdLineExpr) > 1:
+
+        continue_or_exit_calc(cmdLineExpr)
+
+        if len(cmdLineExpr) > 1:
             for num in cmdLineExpr.split():
                 if num.isalpha() and num not in operators:
                     print('Cannot add letters')
