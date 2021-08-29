@@ -1,11 +1,6 @@
 import operator
 import argparse
 import sys
-# import pylint.lint
-
-# pylint_opts = ['basics.py','--load-plugins=pylint.extensions.mccabe','--rcfile=~/.pylintrc']
-
-# pylint.lint.Run(pylint_opts)
 
 def new_calc_exit_calc(expr):
     if expr == 'q':
@@ -32,11 +27,12 @@ def rpn_algo(expr, operators, stack, ops):
             second_val = stack.pop()
             result = ops[f'{expr_operator}'](second_val, first_val)
             stack.append(result)
-            print(result)
 
 def calc_one_or_more_expr(expr, stack, operators, ops):
     for num in expr.split():
         rpn_algo(num, operators, stack, ops)
+    print(stack[-1])
+
 
 def not_num_or_operator(expr, operators):
     return expr.isalpha() and expr not in operators
@@ -55,8 +51,7 @@ def reverse_polish_notation_calc():
         cmd_line_expr = input('Input: ').lstrip(' ')
 
         new_calc_exit_calc(cmd_line_expr)
-        if cmd_line_expr not in operators:
-            print(cmd_line_expr)
+ 
         calc_one_or_more_expr(cmd_line_expr, stack, operators, ops)
 
 reverse_polish_notation_calc()
