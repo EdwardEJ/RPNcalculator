@@ -11,6 +11,27 @@ def continue_or_exit_calc(expr):
         continue_expr = False
         return continue_expr, calc()
 
+def calc_more_than_one_expr(expr, stack, operators, ops):
+    for num in expr.split():
+        if num.isalpha() and num not in operators:
+            print('Cannot add letters')
+            continue
+        elif num in operators and len(stack) < 2:
+            print("Need at least 2 values before calculating")
+            break
+        else:
+            if num.isdigit():
+                stack.append(int(num))
+            elif num not in operators:
+                stack.append(float(num))
+            elif num in operators:
+                exprOperator = num
+                firstVal = stack.pop()
+                secVal = stack.pop()
+                result = ops[f'{exprOperator}'](secVal, firstVal)
+                stack.append(result)
+    print(stack[-1])
+
 def calc():
     ops = { "+": operator.add,
            "-": operator.sub,
@@ -27,25 +48,7 @@ def calc():
         continue_or_exit_calc(cmdLineExpr)
 
         if len(cmdLineExpr) > 1:
-            for num in cmdLineExpr.split():
-                if num.isalpha() and num not in operators:
-                    print('Cannot add letters')
-                    continue
-                elif num in operators and len(stack) < 2:
-                    print("Need at least 2 values before calculating")
-                    break
-                else:
-                    if num.isdigit():
-                        stack.append(int(num))
-                    elif num not in operators:
-                        stack.append(float(num))
-                    elif num in operators:
-                        exprOperator = num
-                        firstVal = stack.pop()
-                        secVal = stack.pop()
-                        result = ops[f'{exprOperator}'](secVal, firstVal)
-                        stack.append(result)
-            print(stack[-1])
+            calc_more_than_one_expr(cmdLineExpr, stack, operators, ops)
         else:
             if cmdLineExpr.isalpha() and cmdLineExpr not in operators:
                 print('Cannot add letters')
