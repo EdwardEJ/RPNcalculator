@@ -2,6 +2,25 @@ import operator
 import argparse
 import sys
 
+def reverse_polish_notation_calc():
+    ops = { "+": operator.add,
+           "-": operator.sub,
+           "*": operator.mul,
+           "/": operator.truediv,
+          }
+    operators = '+-*/'
+    stack = []
+    continue_expr = True
+
+    while continue_expr:
+        cmd_line_expr = input('Input: ').lstrip(' ')
+
+        new_calc_exit_calc(cmd_line_expr)
+ 
+        for num in cmd_line_expr.split():
+            rpn_algo(num, operators, stack, ops)
+        print(stack[-1])
+
 def new_calc_exit_calc(expr):
     if expr == 'q':
         print('Exit')
@@ -28,37 +47,14 @@ def rpn_algo(expr, operators, stack, ops):
             result = ops[f'{expr_operator}'](second_val, first_val)
             stack.append(result)
 
-def calc_one_or_more_expr(expr, stack, operators, ops):
-    for num in expr.split():
-        rpn_algo(num, operators, stack, ops)
-    print(stack[-1])
-
-
 def not_num_or_operator(expr, operators):
     return expr.isalpha() and expr not in operators
 
-def reverse_polish_notation_calc():
-    ops = { "+": operator.add,
-           "-": operator.sub,
-           "*": operator.mul,
-           "/": operator.truediv,
-          }
-    operators = '+-*/'
-    stack = []
-    continue_expr = True
-
-    while continue_expr:
-        cmd_line_expr = input('Input: ').lstrip(' ')
-
-        new_calc_exit_calc(cmd_line_expr)
- 
-        calc_one_or_more_expr(cmd_line_expr, stack, operators, ops)
-
-reverse_polish_notation_calc()
 
 def main():
     parser = argparse.ArgumentParser(description='Performs calculations using Reverse Polish Notation')
     parser.add_argument(dest='rpncalc', action='store_true', help='Enter an expression to calculate')
+    reverse_polish_notation_calc()
 
 if __name__ == '__main__':
     main()
